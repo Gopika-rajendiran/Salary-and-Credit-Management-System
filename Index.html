@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <?!= include('Style'); ?>
+</head>
+<body>
+
+  <div id="loginPage">
+    <div class="login-box">
+      <h2>Admin Login</h2>
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
+      <button onclick="doLogin()">Login</button>
+      <p class="error-text" id="loginError"></p>
+    </div>
+  </div>
+
+  <div id="mainPage" style="display:none;">
+
+    <div class="navbar">
+      <button onclick="showSection('dashboard')">Dashboard</button>
+      <button onclick="showSection('employee')">Employee</button>
+      <button onclick="showSection('salary')">Salary</button>
+      <button onclick="showSection('credit')">Credit</button>
+      <button onclick="showSection('reports')">Reports</button>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="container">
+
+      <div id="dashboard" class="page-section active-section">
+        <h2>Dashboard</h2>
+        <div class="dashboard-cards">
+          <div class="card">
+            <h3 id="totalEmployees">0</h3>
+            <p>Total Employees</p>
+          </div>
+          <div class="card">
+            <h3 id="totalSalaryPaid">0</h3>
+            <p>Total Salary Paid</p>
+          </div>
+          <div class="card">
+            <h3 id="totalCreditPending">0</h3>
+            <p>Total Credit Pending</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="employee" class="page-section">
+        <h2>Employee Management</h2>
+
+        <div class="form-group">
+          <label>Employee ID</label>
+          <input type="text" id="empId" placeholder="e.g. E101">
+        </div>
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="empName" placeholder="Employee Name">
+        </div>
+        <div class="form-group">
+          <label>Department</label>
+          <input type="text" id="empDept" placeholder="Department">
+        </div>
+        <div class="form-group">
+          <label>Designation</label>
+          <input type="text" id="empDesignation" placeholder="Designation">
+        </div>
+        <div class="form-group">
+          <label>Contact</label>
+          <input type="text" id="empContact" placeholder="Contact Number">
+        </div>
+
+        <button onclick="saveEmployee()">Add Employee</button>
+        <button onclick="updateEmployeeData()">Update Employee</button>
+        <button onclick="clearEmployeeForm()">Clear</button>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Emp ID</th>
+              <th>Name</th>
+              <th>Department</th>
+              <th>Designation</th>
+              <th>Contact</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="employeeTableBody"></tbody>
+        </table>
+      </div>
+
+      <div id="salary" class="page-section">
+        <h2>Salary Management</h2>
+
+        <div class="form-group">
+          <label>Select Employee</label>
+          <select id="salaryEmpId"></select>
+        </div>
+        <div class="form-group">
+          <label>Basic Salary</label>
+          <input type="number" id="basicSalary" placeholder="Basic Salary">
+        </div>
+        <div class="form-group">
+          <label>Bonus</label>
+          <input type="number" id="bonus" placeholder="Bonus">
+        </div>
+        <div class="form-group">
+          <label>Deduction</label>
+          <input type="number" id="deduction" placeholder="Deduction">
+        </div>
+
+        <button onclick="saveSalary()">Add Salary Record</button>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Emp ID</th>
+              <th>Name</th>
+              <th>Basic</th>
+              <th>Bonus</th>
+              <th>Deduction</th>
+              <th>Net Salary</th>
+            </tr>
+          </thead>
+          <tbody id="salaryTableBody"></tbody>
+        </table>
+      </div>
+
+      <div id="credit" class="page-section">
+        <h2>Credit Management</h2>
+
+        <h3>Add New Credit</h3>
+        <div class="form-group">
+          <label>Credit ID</label>
+          <input type="text" id="creditId" placeholder="e.g. C101">
+        </div>
+        <div class="form-group">
+          <label>Select Employee</label>
+          <select id="creditEmpId"></select>
+        </div>
+        <div class="form-group">
+          <label>Credit Amount</label>
+          <input type="number" id="creditAmount" placeholder="Amount">
+        </div>
+        <button onclick="saveCredit()">Add Credit</button>
+
+        <h3 style="margin-top:20px;">Update Credit Balance (Pay Credit)</h3>
+        <div class="form-group">
+          <label>Credit ID</label>
+          <input type="text" id="payCreditId" placeholder="Credit ID">
+        </div>
+        <div class="form-group">
+          <label>Amount Paid</label>
+          <input type="number" id="paidAmount" placeholder="Amount Paid">
+        </div>
+        <button onclick="payCredit()">Update Balance</button>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Credit ID</th>
+              <th>Emp ID</th>
+              <th>Name</th>
+              <th>Credit Amount</th>
+              <th>Balance</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="creditTableBody"></tbody>
+        </table>
+      </div>
+
+      <div id="reports" class="page-section">
+        <h2>Reports</h2>
+
+        <h3>Employee Report</h3>
+        <table>
+          <thead>
+            <tr><th>Emp ID</th><th>Name</th><th>Department</th></tr>
+          </thead>
+          <tbody id="reportEmployeeBody"></tbody>
+        </table>
+
+        <h3 style="margin-top:20px;">Salary Report</h3>
+        <table>
+          <thead>
+            <tr><th>Emp ID</th><th>Name</th><th>Net Salary</th></tr>
+          </thead>
+          <tbody id="reportSalaryBody"></tbody>
+        </table>
+
+        <h3 style="margin-top:20px;">Credit Report</h3>
+        <table>
+          <thead>
+            <tr><th>Credit ID</th><th>Name</th><th>Balance</th><th>Status</th></tr>
+          </thead>
+          <tbody id="reportCreditBody"></tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <?!= include('JavaScript'); ?>
+</body>
+</html>
+
